@@ -1,11 +1,12 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
 export default function LogIn() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
     const LogInUser = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -23,6 +24,7 @@ export default function LogIn() {
                 alert("You are logged in!");
                 setEmail("");
                 setPassword("");
+                navigate("/home");
             })
             .catch(() => {
                 alert("Some error occured!");
