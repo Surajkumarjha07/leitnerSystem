@@ -38,7 +38,7 @@ export default function Home() {
 
     return (
         <>
-            <section className="relative w-screen h-screen">
+            <section className="relative w-screen h-fit">
                 {
                     !cookie ?
                         <div className="flex flex-col justify-center items-center gap-10 h-screen">
@@ -54,7 +54,7 @@ export default function Home() {
                         :
                         flashCards.length > 0 ?
                             <div className="flex flex-col justify-start items-start gap-10 w-full h-full flex-wrap p-10">
-                                <h1 className="text-xl font-bold"> Your Cards </h1>
+                                <h1 className="text-2xl font-bold text-gray-900"> Your Cards </h1>
                                 {
                                     flashCards.map((card, index) => (
                                         <Card key={index} id={card.id} question={card.question} answer={card.answer} />
@@ -72,6 +72,7 @@ export default function Home() {
                                 </Link>
                             </div>
                 }
+                <p className="text-center text-xl font-bold text-gray-900"> You have {flashCards.length} card due today </p>
             </section>
         </>
     )

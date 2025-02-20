@@ -24,25 +24,27 @@ export default function Card({ id, question, answer }: cardType) {
 
     }, [])
 
-
     const deleteCard = (e: React.MouseEvent) => {
         const target = e.target as HTMLButtonElement;
         if (target) {
-            const targetId = target.parentElement?.children[0].textContent;
+            const targetId = target.parentElement?.parentElement?.children[0].textContent;
             setCardId(targetId);
-        }
-        axios.delete(`http://localhost:4000/flashcards/${cardId}`, {
-            withCredentials: true,
-            headers: {
-                Authorization: `Bearer ${cookie}`
+            if (cardId) {
+                axios.delete(`http://localhost:4000/flashcards/${parseInt(cardId!)}`, {
+                    withCredentials: true,
+                    headers: {
+                        Authorization: `Bearer ${cookie}`
+                    }
+                })
+                    .then(() => {
+                        alert("Card has been deleted!");
+                        window.location.reload();
+                    })
+                    .catch(() => {
+                        alert("Some error occured while deleting!");
+                    })
             }
-        })
-            .then(() => {
-                alert("Card has been deleted!");
-            })
-            .catch(() => {
-                alert("Some error occured while deleting!");
-            })
+        }
     }
 
     const updateCard = (e: React.MouseEvent) => {
@@ -54,21 +56,37 @@ export default function Card({ id, question, answer }: cardType) {
         }
     }
 
-
     const leitnerSystem = (e: React.MouseEvent) => {
         const target = e.target as HTMLButtonElement;
-        const text = target.textContent;
+        const text = target.innerHTML;        
+        const cardElement = target.closest(".card-container");
+        const targetId = cardElement?.querySelector(".id-text")?.textContent;
+        setCardId(targetId);
 
-        if (text) {
-            axios.put("")
+        if (text && cardId) {
+            axios.put("http://localhost:4000/leitnerSystem", {
+                text, cardId
+            }, {
+                withCredentials: true,
+                headers: {
+                    Authorization: `Bearer ${cookie}`
+                }
+            })
+            .then((response) => {
+                response.data.right ?
+                alert("You are progressing!") : alert("You need more attention!");
+            })
+            .catch(() => {
+                alert("Some error occured!");
+            })
         }
     }
 
     return (
         <>
-            <div className="text-black bg-gray-100 px-4 py-4 rounded-lg shadow-md shadow-gray-400">
+            <div className="text-black bg-gray-100 px-4 py-4 rounded-lg shadow-md shadow-gray-400 card-container">
                 <div className="flex justify-between items-center">
-                    <p className="text-gray-800 text-sm font-medium">
+                    <p className="id-text text-gray-800 text-sm font-medium">
                         {id}
                     </p>
 
