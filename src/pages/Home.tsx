@@ -35,7 +35,6 @@ export default function Home() {
         }
     }, [cookie])
 
-
     return (
         <>
             <section className="relative w-screen h-fit">
@@ -52,27 +51,20 @@ export default function Home() {
                             </Link>
                         </div>
                         :
-                        flashCards.length > 0 ?
-                            <div className="flex flex-col justify-start items-start gap-10 w-full h-full flex-wrap p-10">
-                                <h1 className="text-2xl font-bold text-gray-900"> Your Cards </h1>
+                        flashCards.length > 0 &&
+                        <>
+                            <h1 className="text-2xl font-bold text-gray-900 ml-10 mt-6"> Your Cards </h1>
+                            <div className="flex justify-start items-start gap-10 w-full h-full flex-wrap p-10">
                                 {
                                     flashCards.map((card, index) => (
-                                        <Card key={index} id={card.id} question={card.question} answer={card.answer} />
+                                        card.daysLeftToReview == 0 ?
+                                            <Card key={index} id={card.id} question={card.question} answer={card.answer} /> : ""
                                     ))
                                 }
-                            </div> :
-                            <div className="flex flex-col justify-center items-center gap-10 h-screen">
-                                <p className="text-4xl font-bold text-gray-700">
-                                    You don't have any cards currently!
-                                </p>
-                                <Link to={"/create-card"}>
-                                    <button className="bg-blue-500 w-fit cursor-pointer text-white py-2 px-8 rounded-md">
-                                        Create cards
-                                    </button>
-                                </Link>
                             </div>
+                        </>
                 }
-                <p className="text-center text-xl font-bold text-gray-900"> You have {flashCards.length} card due today </p>
+                <p className="text-center text-xl font-bold text-gray-900"> You have {flashCards.length} cards due today </p>
             </section>
         </>
     )
